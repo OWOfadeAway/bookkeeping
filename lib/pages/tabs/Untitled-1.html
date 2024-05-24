@@ -1,0 +1,135 @@
+<!--
+ * @Description: 
+ * @Author: jxh
+ * @Date: 2024-04-20 10:26:41
+ * @LastEditTime: 2024-04-24 16:35:54
+ * @LastEditors: jxh
+-->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>自适应显示多个点标记</title>
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+    <style>
+        html,
+        body,
+        #container {
+            height: 100%;
+            width: 100%;
+        }
+
+        .amap-icon img {
+            width: 25px;
+            height: 34px;
+        }
+
+        .amap-marker-label .info {
+            background-color: rgba(222, 222, 222, 0.5) !important;
+        }
+        .amap-info-sharp{
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+
+    <div class="input-card">
+        <div id="c-longitude">c-longitude</div>
+        <div id="c-latitude">c-latitude</div>
+
+        <h4>地图自适应</h4>
+        <input id="setFitView" type="button" class="btn" value="地图自适应显示" />
+    </div>
+    <div class="info">
+        <div id="centerCoord"></div>
+        <div id="tips"></div>
+    </div>
+    <script type="text/javascript"
+        src="https://webapi.amap.com/maps?v=2.0&key=f89838100ad02487b3fd110f85dc71f1"></script>
+    <script type="text/javascript">
+        var map = new AMap.Map('container', {
+            resizeEnable: true,
+            center: [112.629961, 33.017505],
+            zoom: 13
+        });
+        map.on('click', function (e) {
+            document.getElementById("c-longitude").innerText = e.lnglat.getLng()
+            document.getElementById("c-latitude").innerText = e.lnglat.getLat()
+            const newMarker = new AMap.Marker({
+                map: map,
+                clickable: true,
+                icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png',
+                position: [e.lnglat.getLng(), e.lnglat.getLat()],
+                offset: new AMap.Pixel(-13, -30),
+                map:map
+            });
+            // newMarker.setTitle("<div class='info'>我是 marker 的 label 标签</div>");
+            newMarker.info = new AMap.InfoWindow({
+                    content: '<div class="info" style="position:inherit;margin-bottom:0;"><h4>实时天气</h4><hr><p>城市/区：朝阳区</p><p>天气：多云</p><p>温度：21℃</p><p>风向：东</p><p>风力：≤3 级</p><p>空气湿度：31</p><p>发布时间：2024-04-20 15:03:03</p></div>',
+                    offset: new AMap.Pixel(0, -30)
+                });
+            // newMarker.on('mousemove', () => {
+                
+            // })
+            // 
+            newMarker.on('mouseover', function(e) {
+                    e.target.info.open(map, e.target.getPosition())
+                })
+            newMarker.on('mouseout', (e) => {
+                // e.target.info.close(map, e.target.getPosition())
+
+            })
+
+
+        });
+        map.clearMap();  // 清除地图覆盖物
+
+        var markers = [{
+            icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-1.png',
+            position: [116.205467, 39.907761]
+        }, {
+            icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-2.png',
+            position: [116.368904, 39.913423]
+        }, {
+            icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-3.png',
+            position: [116.305467, 39.807761]
+        }];
+
+        // 添加一些分布不均的点到地图上,地图上添加三个点标记，作为参照
+        markers.forEach(function (marker) {
+            new AMap.Marker({
+                map: map,
+                icon: marker.icon,
+                position: [marker.position[0], marker.position[1]],
+                offset: new AMap.Pixel(-13, -30)
+            });
+        });
+
+        var center = map.getCenter();
+
+        var centerText = '当前中心点坐标：' + center.getLng() + ',' + center.getLat();
+        document.getElementById('centerCoord').innerHTML = centerText;
+        document.getElementById('tips').innerHTML = '成功添加三个点标记，其中有两个在当前地图视野外！';
+
+        var setFitViewBtn = document.getElementById('setFitView');
+        // 添加事件监听, 使地图自适应显示到合适的范围
+        setFitViewBtn.onclick = function () {
+            // 第一个参数为空，表明用图上所有覆盖物 setFitview
+            // 第二个参数为false, 非立即执行
+            // 第三个参数设置上左下右的空白
+            map.setFitView(null, false, [150, 60, 100, 60]);
+            var newCenter = map.getCenter();
+
+            document.getElementById('centerCoord').innerHTML = '当前中心点坐标：' + newCenter.toString();
+            document.getElementById('tips').innerHTML = '通过setFitView，地图自适应显示到合适的范围内,点标记已全部显示在视野中！';
+        };
+    </script>
+</body>
+
+</html>
