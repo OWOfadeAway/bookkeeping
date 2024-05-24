@@ -1,6 +1,6 @@
-# fai
+# bookkeeping
 
-A new Flutter project.
+A bookkeeping project.
 
 ## Getting Started
 
