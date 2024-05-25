@@ -1,11 +1,6 @@
-/*
- * @Description: 
- * 
- * @Author: jxh
- * @Date: 2024-04-17 11:16:51
- * @LastEditTime: 2024-05-25 09:53:47
- * @LastEditors: jxh
- */
+import 'package:fai/pages/compotens/ButtonCard.dart';
+import 'package:fai/pages/compotens/Date.dart';
+import 'package:fai/pages/compotens/card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,7 +10,41 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+class SendType {
+  late final String title;
+  late final int payment;
+  late final IconData icon;
+  SendType(this.title, this.payment, this.icon);
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'payment': payment,
+      'icon': icon,
+    };
+  }
+}
+
+class sendMoney {
+  late final String type;
+  late final int money;
+  late final String date;
+  sendMoney(this.type, this.money, this.date);
+}
+
 class _MyHomePageState extends State<MyHomePage> {
+  List<sendMoney> sendMoneyList = [
+    sendMoney('life', 20, '2025-04-06'),
+    sendMoney('life', 20, '2025-04-06'),
+    sendMoney('life', 20, '2025-04-06'),
+    sendMoney('life', 20, '2025-04-06')
+  ];
+
+  List<SendType> sendTypeMap = [
+    SendType('购物消费', 50, Icons.shopping_cart_outlined),
+    SendType('吃饭消费', 50, Icons.restaurant_menu_outlined),
+    SendType('生活消费', 50, Icons.nightlife_outlined),
+    SendType('娱乐消费', 50, Icons.sports_esports_outlined),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +68,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-        body: Center(
+        body: SingleChildScrollView(
+            child: Center(
           child: Column(
             children: [
               Row(
@@ -47,143 +77,95 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   Flexible(
                       flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(7.0),
-                        child: Ink(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.0),
-                                color: Colors.lightBlue[100]),
-                            height: 80,
-                            width: MediaQuery.of(context).size.width / 2.3,
-                            child: InkWell(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                              onTap: () => {},
-                              child: Row(
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                      flex: 2,
-                                      child: Icon(Icons.receipt_long,
-                                          color: Colors.deepOrangeAccent[200],
-                                          size: 45.0)),
-                                  const Expanded(
-                                      flex: 2,
-                                      child: Text(
-                                        '账单',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                            letterSpacing: 5.0,
-                                            fontWeight: FontWeight.w600,
-                                            fontStyle: FontStyle.italic),
-                                      )),
-                                ],
-                              ),
-                            )),
+                      child: ButtonCard(
+                        icon: Icons.receipt_long,
+                        text: '账单',
+                        backgroundColor: Colors.lightBlue[100] as Color,
+                        color: Colors.deepOrangeAccent[200] as Color,
+                        onTap: () {},
                       )),
                   Flexible(
                       flex: 2,
-                      child: Padding(
-                          padding: const EdgeInsets.all(7.0),
-                          child: Ink(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.0),
-                                color: Colors.amber[200]),
-                            height: 80,
-                            width: MediaQuery.of(context).size.width / 2.3,
-                            child: InkWell(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                              onTap: () => {},
-                              child: const Row(
-                                children: [
-                                  Expanded(
-                                      flex: 2,
-                                      child: Icon(Icons.edit_note_outlined,
-                                          color:Color.fromARGB(255, 255, 64, 105),
-                                          size: 45.0)),
-                                  Expanded(
-                                      flex: 2,
-                                      child: Text(
-                                        '记录',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                            letterSpacing: 5.0,
-                                            fontWeight: FontWeight.w600,
-                                            fontStyle: FontStyle.italic),
-                                      )),
-                                ],
-                              ),
-                            ),
-                          ))),
+                      child: ButtonCard(
+                        icon: Icons.edit_note_outlined,
+                        text: '记录',
+                        backgroundColor: Colors.amber[200] as Color,
+                        color: Color.fromARGB(255, 255, 64, 105),
+                        onTap: () {},
+                      )),
                 ],
               ),
-              Container(
-                  width: MediaQuery.of(context).size.width * 0.94,
-                  decoration: BoxDecoration(
-                      color: Colors.blue[50],
-                      borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          trailing:Text('查看更多',style: TextStyle(fontSize: 15),),
-                          leading: Icon(Icons.equalizer),
-                          title: Text(
-                            '本月消费统计',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                letterSpacing: 2.0,
-                                fontWeight: FontWeight.w600,
-                                fontStyle: FontStyle.italic),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.shopping_cart_outlined,size: 35,color: Color.fromARGB(255, 255, 64, 105),),
-                                Text('购物消费',style: TextStyle(fontSize: 15),),
-                                Text('50'+'元')
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.restaurant_outlined,size: 35,color: Color.fromARGB(255, 255, 64, 105),),
-                                Text('吃饭消费',style: TextStyle(fontSize: 15),),
-                                Text('50'+'元')
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.nightlife_outlined,size: 35,color: Color.fromARGB(255, 255, 64, 105),),
-                                Text('生活消费',style: TextStyle(fontSize: 15),),
-                                Text('50'+'元')
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.sports_esports_outlined,size: 35,color: Color.fromARGB(255, 255, 64, 105),),
-                                Text('娱乐消费',style: TextStyle(fontSize: 15),),
-                                Text('50'+'元')
-                              ],
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ))
+              MainCard(
+                  title: '本月消费统计',
+                  titleIcon: const Icon(Icons.equalizer),
+                  trailing: const Text(
+                    '查看更多',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                          width: MediaQuery.of(context).size.width * 0.90,
+                          height: 95,
+                          child: GridView.count(
+                              physics: NeverScrollableScrollPhysics(),
+                              crossAxisCount: 4,
+                              children: sendTypeMap.map<Widget>((e) {
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      e.icon,
+                                      size: 35,
+                                      color: Color.fromARGB(255, 255, 64, 105),
+                                    ),
+                                    Text(
+                                      e.title,
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                    // ignore: prefer_interpolation_to_compose_strings
+                                    Text(e.payment.toString() + '元')
+                                  ],
+                                );
+                              }).toList()))
+                    ],
+                  )),
+              MainCard(
+                title: '消费日历',
+                titleIcon: Icon(Icons.calendar_month),
+                trailing: const Text(
+                  '切换月份',
+                  style: TextStyle(fontSize: 15),
+                ),
+                content: Dates(),
+              ),
+              MainCard(
+                  title: '消费列表',
+                  titleIcon: Icon(Icons.list_alt_outlined),
+                  trailing: const Text(
+                    '更多',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  content:Container(child:  ListView(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      children: sendMoneyList
+                          .map<Widget>((e) => Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                              width: MediaQuery.of(context).size.width * 0.94,
+                              height: 50,
+                              child: ListTile(
+                                leading: e.type == 'life'
+                                    ? Icon(Icons.nightlife_outlined)
+                                    : Icon(Icons.sports_esports_outlined),
+                                title: Text(e.type == 'life' ? '生活' : '娱乐消费'),
+                                subtitle:Text('花费:${e.money.toString()}') ,
+                                trailing:Text(e.date),
+                              )))
+                          .toList()))),
             ],
           ),
-        ));
+        )));
   }
 }
