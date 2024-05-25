@@ -21,21 +21,21 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
-          title: const Row(
+          title:  Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ListTile(
-                leading: Icon(Icons.today),
-                title: Text('今日消费: 200', style: TextStyle(fontSize: 15)),
-              ),
-              ListTile(
-                leading: Icon(Icons.self_improvement),
-                title: Text('今日消费: 200', style: TextStyle(fontSize: 15)),
-              ),
-              ListTile(
-                leading: Icon(Icons.thirty_fps_outlined),
-                title: Text('本月消费: 200', style: TextStyle(fontSize: 15)),
-              ),
+              Container(
+                width: MediaQuery.of(context).size.width / 2.2,
+                  child: ListTile(
+                    leading: Icon(Icons.today),
+                    title: Text('今日消费: 200', style: TextStyle(fontSize: 15)),
+                  )),
+              Container(
+                width: MediaQuery.of(context).size.width / 2.2,
+                  child: ListTile(
+                    leading: Icon(Icons.thirty_fps_outlined),
+                    title: Text('本月消费: 200', style: TextStyle(fontSize: 15)),
+                  ))
             ],
           ),
         ),
