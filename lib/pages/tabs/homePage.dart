@@ -3,7 +3,7 @@
  * 
  * @Author: jxh
  * @Date: 2024-04-17 11:16:51
- * @LastEditTime: 2024-05-24 17:37:20
+ * @LastEditTime: 2024-05-25 09:53:47
  * @LastEditors: jxh
  */
 import 'package:flutter/material.dart';
@@ -21,18 +21,18 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
-          title:  Row(
+          title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: MediaQuery.of(context).size.width / 2.2,
-                  child: ListTile(
+                  width: MediaQuery.of(context).size.width / 2.2,
+                  child: const ListTile(
                     leading: Icon(Icons.today),
                     title: Text('今日消费: 200', style: TextStyle(fontSize: 15)),
                   )),
               Container(
-                width: MediaQuery.of(context).size.width / 2.2,
-                  child: ListTile(
+                  width: MediaQuery.of(context).size.width / 2.2,
+                  child: const ListTile(
                     leading: Icon(Icons.thirty_fps_outlined),
                     title: Text('本月消费: 200', style: TextStyle(fontSize: 15)),
                   ))
@@ -101,8 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   Expanded(
                                       flex: 2,
                                       child: Icon(Icons.edit_note_outlined,
-                                          color: const Color.fromARGB(
-                                              255, 255, 64, 105),
+                                          color:Color.fromARGB(255, 255, 64, 105),
                                           size: 45.0)),
                                   Expanded(
                                       flex: 2,
@@ -120,7 +119,69 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ))),
                 ],
-              )
+              ),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.94,
+                  decoration: BoxDecoration(
+                      color: Colors.blue[50],
+                      borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          trailing:Text('查看更多',style: TextStyle(fontSize: 15),),
+                          leading: Icon(Icons.equalizer),
+                          title: Text(
+                            '本月消费统计',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                letterSpacing: 2.0,
+                                fontWeight: FontWeight.w600,
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.shopping_cart_outlined,size: 35,color: Color.fromARGB(255, 255, 64, 105),),
+                                Text('购物消费',style: TextStyle(fontSize: 15),),
+                                Text('50'+'元')
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.restaurant_outlined,size: 35,color: Color.fromARGB(255, 255, 64, 105),),
+                                Text('吃饭消费',style: TextStyle(fontSize: 15),),
+                                Text('50'+'元')
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.nightlife_outlined,size: 35,color: Color.fromARGB(255, 255, 64, 105),),
+                                Text('生活消费',style: TextStyle(fontSize: 15),),
+                                Text('50'+'元')
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.sports_esports_outlined,size: 35,color: Color.fromARGB(255, 255, 64, 105),),
+                                Text('娱乐消费',style: TextStyle(fontSize: 15),),
+                                Text('50'+'元')
+                              ],
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ))
             ],
           ),
         ));

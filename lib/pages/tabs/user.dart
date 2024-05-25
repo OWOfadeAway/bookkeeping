@@ -3,7 +3,7 @@
  * 
  * @Author: jxh
  * @Date: 2024-04-17 11:16:51
- * @LastEditTime: 2024-05-24 15:31:45
+ * @LastEditTime: 2024-05-25 08:56:32
  * @LastEditors: jxh
  */
 import 'dart:ui';
@@ -115,8 +115,7 @@ class _user extends State<User> {
                                   // ignore: unnecessary_const
                                   onTap: (){} ,
                                   child:const ListTile(
-                                    //  Color.fromRGBO(247, 244, 237, 1),
-                                    
+                                    //  Color.fromRGBO(247, 244, 237, 1),                                    
                                     leading: Icon(Icons.settings),
                                     title: Text("设置"),
                                   ),
