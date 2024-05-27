@@ -2,6 +2,8 @@ import 'package:fai/pages/compotens/ButtonCard.dart';
 import 'package:fai/pages/compotens/Date.dart';
 import 'package:fai/pages/compotens/card.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_rx/get_rx.dart';
+import '../../database/sqlite.dart';
 import 'package:get/get.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -32,12 +34,15 @@ class sendMoney {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<sendMoney> sendMoneyList = [
-    sendMoney('life', 20, '2025-04-06'),
-    sendMoney('life', 20, '2025-04-06'),
-    sendMoney('life', 20, '2025-04-06'),
-    sendMoney('life', 20, '2025-04-06')
-  ];
+  RxList<SendItem> sendMoneyList = RxList<SendItem>();
+
+  @override
+  void initState(){
+    createDatabase().then((value)async{
+      List<SendItem> list = await queryAll(value);
+      sendMoneyList.assignAll(list);
+    });
+  }
 
   List<SendType> sendTypeMap = [
     SendType('购物消费', 50, Icons.shopping_cart_outlined),
@@ -91,7 +96,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         text: '记录',
                         backgroundColor: Colors.amber[200] as Color,
                         color: Color.fromARGB(255, 255, 64, 105),
-                        onTap: () {},
+                        onTap: () {
+                          Get.toNamed('/addSendItem');
+                        },
                       )),
                 ],
               ),

@@ -18,7 +18,7 @@ class MainCard extends StatelessWidget {
   MainCard({Key? key, this.title='', required this.content,this.trailing = const SizedBox.shrink(),required this.titleIcon})
       : super(key: key);
 
-  @override
+
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
