@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Author: jxh
+ * @Date: 2024-05-25 14:46:18
+ * @LastEditTime: 2024-05-27 08:39:22
+ * @LastEditors: jxh
+ */
 import 'package:flutter/material.dart';
 
 class ButtonCard extends StatelessWidget {
@@ -27,7 +34,7 @@ class ButtonCard extends StatelessWidget {
           height: 80,
           width: MediaQuery.of(context).size.width / 2.3,
           child: InkWell(
-            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+            borderRadius:const BorderRadius.all(Radius.circular(20.0)),
             onTap: onTap,
             child: Row(
               children: [
@@ -39,8 +46,8 @@ class ButtonCard extends StatelessWidget {
                     flex: 2,
                     child: Text(
                       text,
-                      style: TextStyle(
-                          color: Colors.black,
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 247, 244, 244),
                           fontSize: 20,
                           letterSpacing: 5.0,
                           fontWeight: FontWeight.w600,

@@ -1,11 +1,3 @@
-/*
- * @Description: 
- * @Author: jxh
- * @Date: 2024-04-18 10:50:42
- * @LastEditTime: 2024-04-19 11:17:49
- * @LastEditors: jxh
- */
-
 import 'package:flutter/material.dart';
 import './router/router.dart';
 import './database/sqlite.dart';

@@ -1,6 +1,6 @@
-import 'package:fai/pages/compotens/ButtonCard.dart';
-import 'package:fai/pages/compotens/Date.dart';
-import 'package:fai/pages/compotens/card.dart';
+import 'package:bookkeeping/pages/compotens/ButtonCard.dart';
+import 'package:bookkeeping/pages/compotens/Date.dart';
+import 'package:bookkeeping/pages/compotens/card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/get_rx.dart';
 import '../../database/sqlite.dart';
