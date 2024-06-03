@@ -129,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                     Text(
                                       e.title,
-                                      style: TextStyle(fontSize: 15),
+                                      style: const TextStyle(fontSize: 15),
                                     ),
                                     // ignore: prefer_interpolation_to_compose_strings
                                     Text(e.payment.toString() + '元')

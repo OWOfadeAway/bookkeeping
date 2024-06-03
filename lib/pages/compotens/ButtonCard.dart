@@ -1,10 +1,3 @@
-/*
- * @Description: 
- * @Author: jxh
- * @Date: 2024-05-25 14:46:18
- * @LastEditTime: 2024-05-27 08:39:22
- * @LastEditors: jxh
- */
 import 'package:flutter/material.dart';
 
 class ButtonCard extends StatelessWidget {
@@ -46,8 +39,8 @@ class ButtonCard extends StatelessWidget {
                     flex: 2,
                     child: Text(
                       text,
-                      style: const TextStyle(
-                          color: Color.fromARGB(255, 247, 244, 244),
+                      style: TextStyle(
+                          color: color,
                           fontSize: 20,
                           letterSpacing: 5.0,
                           fontWeight: FontWeight.w600,
