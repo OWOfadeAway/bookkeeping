@@ -27,7 +27,7 @@ class ButtonCard extends StatelessWidget {
           height: 80,
           width: MediaQuery.of(context).size.width / 2.3,
           child: InkWell(
-            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+            borderRadius:const BorderRadius.all(Radius.circular(20.0)),
             onTap: onTap,
             child: Row(
               children: [
@@ -40,7 +40,7 @@ class ButtonCard extends StatelessWidget {
                     child: Text(
                       text,
                       style: TextStyle(
-                          color: Colors.black,
+                          color: color,
                           fontSize: 20,
                           letterSpacing: 5.0,
                           fontWeight: FontWeight.w600,
