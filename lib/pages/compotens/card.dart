@@ -32,6 +32,7 @@ class MainCard extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(0.0),
         child:Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children:[
              ListTile(
                     trailing: trailing,

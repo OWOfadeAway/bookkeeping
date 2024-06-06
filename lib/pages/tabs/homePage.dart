@@ -114,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: [
                       Container(
                           width: MediaQuery.of(context).size.width * 0.90,
-                          height: 95,
+                          height: 100,
                           child: GridView.count(
                               physics: NeverScrollableScrollPhysics(),
                               crossAxisCount: 4,
