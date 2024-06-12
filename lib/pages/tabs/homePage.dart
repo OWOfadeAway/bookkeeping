@@ -3,15 +3,24 @@ import 'package:bookkeeping/pages/compotens/Date.dart';
 import 'package:bookkeeping/pages/compotens/card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/get_rx.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/state_manager.dart';
 import '../../database/sqlite.dart';
 import 'package:get/get.dart';
+import '../state/type.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
-
+getSendType(String type){
+  for(var i in typeList) {
+    if(i.id == type){
+      return i;
+    }
+  }
+}
 class SendType {
   late final String title;
   late final int payment;
@@ -35,21 +44,45 @@ class sendMoney {
 
 class _MyHomePageState extends State<MyHomePage> {
   RxList<SendItem> sendMoneyList = RxList<SendItem>();
-
-  @override
-  void initState(){
-    createDatabase().then((value)async{
-      List<SendItem> list = await queryAll(value);
-      sendMoneyList.assignAll(list);
-    });
-  }
-
-  List<SendType> sendTypeMap = [
+  RxInt mouthSend = RxInt(0);
+  RxInt daySend = RxInt(0);
+  RxInt buySend = RxInt(0);
+  RxInt eatSend = RxInt(0);
+  RxInt lifeSend = RxInt(0);
+  RxInt playSend = RxInt(0);
+  RxList<SendType> sendTypeMap = RxList([
     SendType('购物消费', 50, Icons.shopping_cart_outlined),
     SendType('吃饭消费', 50, Icons.restaurant_menu_outlined),
     SendType('生活消费', 50, Icons.nightlife_outlined),
     SendType('娱乐消费', 50, Icons.sports_esports_outlined),
-  ];
+  ]);
+  updatePageData(){
+    createDatabase().then((value)async{
+      List<SendItem> list = await queryAll(value);
+      sendMoneyList.assignAll(list);
+      int mouthSendSum = await getThisMounthSend(value);
+      mouthSend.value = mouthSendSum;
+      int daySendSum = await getNowDaySend(value);
+      daySend.value = daySendSum;
+
+      int buySend = await getThisMounthBySend(value,'buy');
+      int lifeSend = await getThisMounthBySend(value,'life');
+      int playSend = await getThisMounthBySend(value,'play');
+      int eatSend = await getThisMounthBySend(value,'eat');
+      sendTypeMap.value = [
+        SendType('购物消费', buySend, Icons.shopping_cart_outlined),
+        SendType('吃饭消费', eatSend, Icons.restaurant_menu_outlined),
+        SendType('生活消费', lifeSend, Icons.nightlife_outlined),
+        SendType('娱乐消费', playSend, Icons.sports_esports_outlined),
+      ];
+      value.close();
+    });
+  }
+  @override
+  void initState(){
+    updatePageData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,15 +93,15 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               Container(
                   width: MediaQuery.of(context).size.width / 2.2,
-                  child: const ListTile(
-                    leading: Icon(Icons.today),
-                    title: Text('今日消费: 200', style: TextStyle(fontSize: 15)),
+                  child: ListTile(
+                    leading: const Icon(Icons.today),
+                    title: Obx(()=>Text('今日消费: ${daySend.value.toString()}', style: TextStyle(fontSize: 15))),
                   )),
               Container(
                   width: MediaQuery.of(context).size.width / 2.2,
-                  child: const ListTile(
-                    leading: Icon(Icons.thirty_fps_outlined),
-                    title: Text('本月消费: 200', style: TextStyle(fontSize: 15)),
+                  child: ListTile(
+                    leading:const Icon(Icons.thirty_fps_outlined),
+                    title: Obx(()=>Text('本月消费: ${mouthSend.value.toString()}', style: TextStyle(fontSize: 15))),
                   ))
             ],
           ),
@@ -96,8 +129,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         text: '记录',
                         backgroundColor: Colors.amber[200] as Color,
                         color: Color.fromARGB(255, 255, 64, 105),
-                        onTap: () {
-                          Get.toNamed('/addSendItem');
+                        onTap:  () async {
+                          var back =await Get.toNamed('/addSendItem');
+                          updatePageData();
                         },
                       )),
                 ],
@@ -115,10 +149,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       Container(
                           width: MediaQuery.of(context).size.width * 0.90,
                           height: 100,
-                          child: GridView.count(
+                          child:Obx(()=> GridView.count(
                               physics: NeverScrollableScrollPhysics(),
                               crossAxisCount: 4,
-                              children: sendTypeMap.map<Widget>((e) {
+                              children: sendTypeMap.value.map<Widget>((e) {
                                 return Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -135,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     Text(e.payment.toString() + '元')
                                   ],
                                 );
-                              }).toList()))
+                              }).toList())))
                     ],
                   )),
               MainCard(
@@ -154,7 +188,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     '更多',
                     style: TextStyle(fontSize: 15),
                   ),
-                  content:Container(child:  ListView(
+                  content:Obx(()=> ListView(
+                      physics: NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       children: sendMoneyList
@@ -163,12 +198,10 @@ class _MyHomePageState extends State<MyHomePage> {
                               width: MediaQuery.of(context).size.width * 0.94,
                               height: 50,
                               child: ListTile(
-                                leading: e.type == 'life'
-                                    ? Icon(Icons.nightlife_outlined)
-                                    : Icon(Icons.sports_esports_outlined),
-                                title: Text(e.type == 'life' ? '生活' : '娱乐消费'),
+                                leading: Icon(getSendType(e.type).icon),
+                                title: Text(getSendType(e.type).name),
                                 subtitle:Text('花费:${e.money.toString()}') ,
-                                trailing:Text(e.date),
+                                trailing:Text(new DateTime.fromMicrosecondsSinceEpoch(e.date * 1000).toString().substring(0,10)),
                               )))
                           .toList()))),
             ],

@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    MoneyItem newItem = MoneyItem('life',80,'2024-05-06');
+    MoneyItem newItem = MoneyItem('life',80,new DateTime.now().millisecondsSinceEpoch);
 
     // createDatabase().then((value) => insertData(newItem,value));
 

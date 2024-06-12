@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io' as io;
@@ -8,13 +10,12 @@ Future<String> getDatabasePath(String dbName) async {
   final directory = await getApplicationDocumentsDirectory();
   // 拼接路径
   final path = join(directory.path, dbName);
-  print('$path');
   return path;
 }
 class MoneyItem {
   String type;
   num money;
-  String date;
+  int date;
   MoneyItem(this.type,this.money,this.date);
   Map<String, dynamic> toMap() {
     return {
@@ -26,7 +27,7 @@ class MoneyItem {
 }
 class SendItem extends MoneyItem{
   num id;
-  SendItem(String type,num money,String date,this.id) : super(type, money, date);
+  SendItem(String type,num money,int date,this.id) : super(type, money, date);
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -46,7 +47,7 @@ Future<Database> createDatabase() async {
     // 当数据库第一次被创建时，执行创建表的操作
     onCreate: (db, version) {
       return db.execute(
-        "CREATE TABLE sendList(id INTEGER PRIMARY KEY, type TEXT,money INTEGER,date TEXT)",
+        "CREATE TABLE sendList(id INTEGER PRIMARY KEY, type TEXT,money INTEGER,date INTEGER)",
       );
     },
   );
@@ -67,16 +68,65 @@ Future<void> insertData(MoneyItem data, Database db) async {
     print('Failed to insert data: $e');
   }
 }
+Future<int> getThisMounthBySend(Database db,String type) async {
+  try {
+    // 查询所有数据
+    DateTime now = DateTime.now(); // 获取当前日期时间
+    int monthStart = DateTime(now.year, now.month, 1).millisecondsSinceEpoch; // 获取本月第一天的日期时间
+    int monthEnd = DateTime(now.year, now.month + 1, 0, 23, 59, 59).millisecondsSinceEpoch; // 获取本月最后一天的日期时间（时间为23:59:59）
+    List<Map<String, Object?>> sum = await db.rawQuery('SELECT SUM(money) FROM sendList WHERE date < ${monthEnd} AND date > ${monthStart}  AND type = "${type}";') ;
+    return sum[0]['SUM(money)'] as int;
+  }catch (e) {
+    // 打印错误信息
+    print('Failed to insert data: $e');
+    return 0;
+  }
+}
+Future<int> getNowDaySend(Database db) async {
+  try {
+    // 查询所有数据
+    DateTime now = DateTime.now(); // 获取当前日期时间
+    int monthStart = DateTime(now.year, now.month, now.day).millisecondsSinceEpoch; // 获取本月第一天的日期时间
+    int monthEnd = DateTime(now.year, now.month, now.day, 23, 59, 59, 999).millisecondsSinceEpoch; // 获取本月最后一天的日期时间（时间为23:59:59）
+    List<Map<String, Object?>> sum = await db.rawQuery('SELECT SUM(money) FROM sendList WHERE date < ${monthEnd} AND date > ${monthStart} ;') ;
+    return sum[0]['SUM(money)'] as int;
+  }catch (e) {
+    // 打印错误信息
+    return 0;
+  }
+}
+Future<int> getThisMounthSend(Database db) async {
+  try {
+    // 查询所有数据
+    DateTime now = DateTime.now(); // 获取当前日期时间
+    int monthStart = DateTime(now.year, now.month, 1).millisecondsSinceEpoch; // 获取本月第一天的日期时间
+    int monthEnd = DateTime(now.year, now.month + 1, 0, 23, 59, 59).millisecondsSinceEpoch; // 获取本月最后一天的日期时间（时间为23:59:59）
+    List<Map<String, Object?>> sum = await db.rawQuery('SELECT SUM(money) FROM sendList WHERE date < ${monthEnd} AND date > ${monthStart} ;') ;
+    return sum[0]['SUM(money)'] as int;
+  }catch (e) {
+    // 打印错误信息
+    return 0;
+  }
+}
 Future<List<SendItem>> queryAll(Database db) async {
-  // 查询所有数据
-  final List<Map<String, dynamic>> maps = await db.query('sendList');
-  return List.generate(maps.length, (i) {
-    return SendItem(
-      maps[i]['type'],
-      maps[i]['money'],
-      maps[i]['date'],
-      maps[i]['id'],
-    );
-  });
+  try {
+    // 查询所有数据
+    final List<Map<String, dynamic>> maps = await db.query('sendList',orderBy: 'date DESC');
+
+    return List.generate(maps.length, (i) {
+
+      return SendItem(
+        maps[i]['type'],
+        maps[i]['money'],
+        maps[i]['date'],
+        maps[i]['id'],
+      );
+    });
+  }catch (e) {
+    // 打印错误信息
+    print('Failed to insert data: $e');
+    return [];
+  }
+
 }
 

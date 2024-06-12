@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../state/type.dart';
 import '../compotens/NumberFeild.dart';
-
+import '../../database/sqlite.dart';
 class AddSendItem extends StatefulWidget {
   const AddSendItem({super.key});
   @override
@@ -123,16 +123,28 @@ class _AddSendItem extends State<AddSendItem> {
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 100,
                 ),
                  Center(
                   child: IconButton(
-                    icon: const Icon(Icons.send,size: 80,),
+                    color: Colors.white,
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.resolveWith((states) {
+                          return Colors.blue;
+                        }),
+                    ),
+                    icon: const Icon(Icons.send,size: 70,),
                     onPressed: () {
-                      
+                      if(_textController.text == ''){
+                        Get.snackbar('未输入金额',"请输入金额信息");
+                        return;
+                      }
+                      print(typeList[selectIndex.value].id);
                       // 按钮点击时执行的操作
                       // ignore: avoid_print
-                      print('IconButton was pressed');
+                      MoneyItem newItem = MoneyItem(typeList[selectIndex.value].id,double.parse(_textController.text) , new DateTime.now().millisecondsSinceEpoch);
+                      createDatabase().then((value) => insertData(newItem,value));
+                      Get.back();
                     }
                   ),
                 )
